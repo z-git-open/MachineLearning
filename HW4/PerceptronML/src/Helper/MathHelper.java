@@ -21,6 +21,14 @@ public class MathHelper {
 		return result;
 	}
 	
+	public static double VectorDistanceFromOrigin(Vector v){
+		if(v == null || v.GetVectorDimension()<1)
+			throw new IllegalArgumentException("VectorDistanceFromOrigin invalid input.");
+		double dotProduct = MathHelper.VectorDotProduct(v, v);
+		return Math.sqrt(dotProduct);
+	}
+	
+	
 	public static void VectorScalarMultiplicationInplace(Vector v, double scalar){
 		if	(v != null){
 			int length = v.GetVectorDimension();
@@ -51,7 +59,10 @@ public class MathHelper {
 		return result;
 	}
 	
-	
+	public static Vector VectorSubtraction(Vector x, Vector y){
+		Vector neg_y = MathHelper.VectorScalarMultiplication(y, (double)-1);
+		return MathHelper.VectorSum(x, neg_y);
+	}
 	
 	
 	public static Vector VectorScalarMultiplication(Vector v, double scalar){

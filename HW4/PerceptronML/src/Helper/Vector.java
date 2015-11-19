@@ -1,5 +1,8 @@
 package Helper;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Vector {
@@ -71,5 +74,14 @@ public class Vector {
 			cloneSet.add(v.Clone());
 		}
 		return cloneSet;
+	}
+	
+	public static void ShowVectorList(ArrayList<Vector> data){
+		if(data != null)
+		{
+			for(Vector v : data){
+				System.out.println(v.toString());
+			}
+		}
 	}
 }

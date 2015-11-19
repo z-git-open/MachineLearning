@@ -73,9 +73,58 @@ public class DataHelper {
 			for(int index = 0; index <= tokens.length-2; index++){
 				v.SetFeature(index, tokens[index+1].split(":")[1]);
 			}
-			v.Label = tokens[0];
+			//v.Label = tokens[0];
+			String tmp = tokens[0];
+			if(tmp.compareToIgnoreCase("0") == 0)
+				v.Label = "-1";
+			else
+				v.Label = "1";
 		}
 		return v;
+	}
+	
+	
+	// eg. vector = [a, b, c]
+	// method return: [aa, ab, ac, bb, bc]
+	public static Vector PairVectorElements(Vector original){
+		Vector vector_transformed = null;
+		if(original != null && original.GetVectorDimension()!=0){
+			ArrayList<String> transformedValues = new ArrayList<String>();
+			int last_idx = original.GetVectorDimension() -1;
+			
+			for(int idx = 0; idx <= last_idx; idx++){
+				double value_idx = Double.parseDouble(original.GetFeatureValue(idx));
+				
+				for(int inner_idx = idx; inner_idx <= last_idx; inner_idx++	){
+					double value_inner_idx = Double.parseDouble(original.GetFeatureValue(inner_idx));
+					double value_transformed = value_idx * value_inner_idx;
+					transformedValues.add(Double.toString(value_transformed));
+				}
+			}
+			
+			int size_transformedValues = transformedValues.size();
+			vector_transformed = new Vector(size_transformedValues);
+				
+			for(int idx = 0; idx < size_transformedValues; idx++){
+				vector_transformed.SetFeature(idx, new String(transformedValues.get(idx)));
+			}
+			vector_transformed.Label = new String(original.Label);
+		}
+		return vector_transformed;
+	}
+	
+	//eg. input = [a, b, c], [u, v, w]
+	// output: [aa,ab,ac,bb,bc], [uu,uv,uw,vv,vw,ww]
+	public static ArrayList<Vector> PairVectorElements(ArrayList<Vector> original){
+		
+		ArrayList<Vector> data_transformed = null;
+		if(original != null){
+			data_transformed = new ArrayList<Vector>();
+			for(Vector v : original){
+				data_transformed.add(DataHelper.PairVectorElements(v));
+			}	
+		}
+		return data_transformed;
 	}
 	
 
