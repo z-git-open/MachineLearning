@@ -42,29 +42,6 @@ public class DataHelper {
 		return false;
 	}
 	
-/*	public ArrayList<Vector> LoadDataVector(String filePath) {
-		ArrayList<Vector> vectors = new ArrayList<Vector>();
-		BufferedReader buffer = null;
-		try {
-			InputStream stream = getClass().getResourceAsStream(filePath);
-			InputStreamReader streamReader = new InputStreamReader(stream);
-			buffer = new BufferedReader(streamReader);
-			String line = null;
-			while ((line = buffer.readLine()) != null) {
-				Vector v = ConvertToVector(line);
-				if (v != null) {
-					vectors.add(v);
-				}
-			}
-			buffer.close();
-		} catch (Exception e) {
-		}
-		return vectors;
-	}*/
-	
-	
-	
-	
 	public static Vector ConvertToVector(String content){
 		Vector v = null;
 		if (content != null && !content.isEmpty()) {
@@ -74,11 +51,16 @@ public class DataHelper {
 				v.SetFeature(index, tokens[index+1].split(":")[1]);
 			}
 			//v.Label = tokens[0];
-			String tmp = tokens[0];
-			if(tmp.compareToIgnoreCase("0") == 0)
+			String label_str = tokens[0];
+			//v.Label = new String(label_str);
+			if(label_str.compareToIgnoreCase("0") == 0 || label_str.compareToIgnoreCase("-1") == 0){
+				v.Label_Int = 0;
 				v.Label = "-1";
-			else
+			}
+			if(label_str.compareToIgnoreCase("1") == 0 || label_str.compareToIgnoreCase("+1") == 0){
+				v.Label_Int = 1;
 				v.Label = "1";
+			}
 		}
 		return v;
 	}
@@ -126,6 +108,64 @@ public class DataHelper {
 		}
 		return data_transformed;
 	}
+	
+	// split entire dataset into k parts (k-fold), each part is equal sized.
+	public static ArrayList<ArrayList<Vector>> SplitData(ArrayList<Vector> data, int kfold){
+		
+		int dataSize = data.size();
+		//int partSize = (int)Math..ceil((double)dataSize / (double)kfold);
+		long partSize = Math.round((double)dataSize / (double)kfold);
+		
+		ArrayList<ArrayList<Vector>> dataParts = new ArrayList<ArrayList<Vector>>();
+		
+		int counter = 0;
+		ArrayList<Vector> part = new ArrayList<Vector>();
+		for(int idx = 0; idx < dataSize; idx++){
+			part.add(data.get(idx).Clone());
+			counter++;
+			if(counter == partSize){
+				dataParts.add(part);
+				counter = 0;
+				part = new ArrayList<Vector>();
+			}
+		}
+		if(!part.isEmpty())
+			dataParts.add(part);
+		
+		if(dataParts.size()>kfold){
+			int dataPartsSize = dataParts.size();
+			ArrayList<Vector> lastPart = dataParts.get(dataPartsSize-1);
+			ArrayList<Vector> secondLastPart = dataParts.get(dataPartsSize-2);
+			
+			ArrayList<Vector> merge = new ArrayList<Vector>();
+			merge.addAll(secondLastPart);
+			merge.addAll(lastPart);
+			
+			dataParts.remove(dataPartsSize-1);
+			dataParts.remove(dataPartsSize-2);
+			
+			dataParts.add(merge);
+			
+		}
+		
+		return dataParts;
+	}
+	
+	public static ArrayList<Vector> ReshuffleData(ArrayList<Vector> data){
+		ArrayList<Vector> newDataset = new ArrayList<Vector>();
+		int tmp_size = data.size();
+		while(data.size() > 0){
+			int size = data.size();
+			int randIndex = MathHelper.RandomInt(0, size-1);
+			newDataset.add(data.get(randIndex));
+			data.remove(randIndex);
+		}
+		if(newDataset.size() != tmp_size){
+			throw new UnsupportedOperationException("ReshuffuleData: new data set has different size than the original one.");
+		}
+		return newDataset;
+	}
+	
 	
 
 }

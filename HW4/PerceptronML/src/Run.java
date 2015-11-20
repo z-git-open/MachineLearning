@@ -5,7 +5,8 @@ public class Run {
 		
 		ExperimentWithSummary test = new ExperimentWithSummary();
 		//test.Run_Report_Farthest_Point();
-		test.Run_SVM_OriginalData();
+		//test.Run_SVM_Batch();
+		test.Run_astro_scaled_transformed();
 		
 		
 		System.out.println("********************************");

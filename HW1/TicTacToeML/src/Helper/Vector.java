@@ -1,14 +1,10 @@
 package Helper;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Vector {
 	private ArrayList<String> features;
 	public String Label;
-	public int Label_Int;
 
 	public Vector(int size) {
 		features = new ArrayList<String>(size);
@@ -35,24 +31,8 @@ public class Vector {
 		for (String s : features) {
 			result = result + " " + s;
 		}
-		return "["+result + "  Label: " + Label+"]";
+		return "["+result + " " + Label+"]";
 	}
-	
-	public String toStringWithoutLabel(){
-		String result = "";
-		for (String s : features) {
-			String trimedStr = "";
-			if(s.startsWith("-")){
-				trimedStr = s.substring(0, 5);
-			}
-			else
-				trimedStr = s.substring(0, 4);
-			result = result + " " + trimedStr;
-		}
-		return "["+result+"]";
-	}
-	
-	
 	
 	public Vector Clone()
 	{
@@ -61,10 +41,7 @@ public class Vector {
 		for(int idx = 0; idx < size; idx++){
 			clone.SetFeature(idx, new String(this.features.get(idx)));
 		}
-		if(this.Label != null){
-			clone.Label = new String(this.Label);
-		}
-		clone.Label_Int = this.Label_Int;
+		clone.Label = new String(this.Label);
 		return clone;
 	}
 	
@@ -76,14 +53,5 @@ public class Vector {
 			cloneSet.add(v.Clone());
 		}
 		return cloneSet;
-	}
-	
-	public static void ShowVectorList(ArrayList<Vector> data){
-		if(data != null)
-		{
-			for(Vector v : data){
-				System.out.println(v.toString());
-			}
-		}
 	}
 }

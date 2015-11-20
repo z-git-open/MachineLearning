@@ -138,6 +138,13 @@ public class MathHelper {
 		return Double.compare(x, y) <= 0;
 	}
 	
+	public static boolean IsGreater(double x, double y){
+		return Double.compare(x, y)>0;
+	}
+	
+	public static boolean IsEqualOrGreater(double x, double y){
+		return Double.compare(x, y) >=0 ;
+	}
 	
 	public static double Logb(double a, double b) {
 		return Math.log(a) / Math.log(b);

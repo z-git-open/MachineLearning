@@ -140,7 +140,17 @@ public class StochasticGradientDescent {
 		else{
 			realLabel = true;
 		}*/
-		boolean realLabel = Double.compare(Double.parseDouble(example.Label), 0) >= 0;
+		
+		//boolean realLabel = Double.compare(Double.parseDouble(example.Label), 0) >= 0;
+		
+		boolean realLabel;
+		double testLabel = Double.parseDouble(example.Label);
+		
+		if(MathHelper.IsGreater(testLabel, 0))
+			realLabel = true;
+		else
+			realLabel = false;
+			
 		if (predictLabel == realLabel) {
 			matchedPredicts++;
 			return "+1";

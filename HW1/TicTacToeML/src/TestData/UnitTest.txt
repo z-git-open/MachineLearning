@@ -1,0 +1,14 @@
+S,H,H,W,negative
+S,H,H,S,negative
+O,H,H,W,positive
+R,M,H,W,positive
+R,C,N,W,positive
+R,C,N,S,negative
+O,C,N,S,positive
+S,M,H,W,negative
+S,C,N,W,positive
+R,M,N,W,positive
+S,M,N,S,positive
+O,M,H,S,positive
+O,H,N,W,positive
+R,M,H,S,negative
