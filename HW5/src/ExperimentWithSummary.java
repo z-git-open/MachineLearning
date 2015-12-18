@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import Helper.Vector;
+
 import algorithms.*;
 import Helper.DataHelper;
 import Helper.MathHelper;
@@ -19,11 +20,115 @@ public class ExperimentWithSummary {
 	String astro_original_test = "astroOriginal/test";
 	String astro_scaled_train = "astroScaled/train";
 	String astro_scaled_test = "astroScaled/test";
-	double[] learningRates = new double[]{0.01, 0.02, 0.03, 0.04, 0.05, 0.08, 0.1, 0.25, 0.5, 0.75, 1};
+	String project_data = "data0/ProjectData.txt";
+	String project_final_data = "data0/ProjectFinalData.txt";
+	String project_final_data_nobias = "data0/ProjectFinalDataNoBias.txt";
+	String project_data_subset_nobias = "data0/DataNoBias.txt";
+	String project_data_subset = "data0/DataWithBias.txt";
+	
+	double[] learningRates = new double[]{0.01, 0.02, 0.03, 0.04, 0.05, 0.08, 0.1, 0.25, 0.5, 0.75, 1, 2, 3, 4, 5};
 	double[] init_learningRates = new double[]{0.001, 0.01, 0.1, 1.0, 5.0};
 	double[] relativeImportances = new double[]{0.001, 0.01, 0.1, 1.0, 10.0, 20.0, 30.0, 50.0};
+	double min_weight = -5;
+	double max_weight = 5;
+	double margin = 2;
 	
+	public void Run_StdPerceptron_Project(){
+		System.out.println("----- Running Standard Perceptron against project data -----");
+		Table reportTable = new Table(4);
+		reportTable.SetHeader(new String[]{"Learning Rate", "Final Weight Vector", "Mistakes", "Accuracy"});
+		
+		ArrayList<Vector> trainingData = LoadDataVector(this.project_data_subset);
+		ArrayList<Vector> testData = LoadDataVector(this.project_data_subset);
+		int dimension = trainingData.get(0).GetVectorDimension();
+		Vector init_w = MathHelper.RandomizeVector(dimension, this.min_weight, this.max_weight);
+		int epoch = 1;
+		boolean shuffle = true;
+		
+		for(double r : learningRates){
+			StdPerceptron perceptron = new StdPerceptron(init_w, r, epoch, shuffle);
+
+			perceptron.Train(trainingData);
+
+			perceptron.Predict(testData);
+			
+			ArrayList<String> _row = new ArrayList<String>();
+			_row.add(Double.toString(r));
+			_row.add(perceptron.GetCurrentWeightVector().toStringWithoutLabel());
+			_row.add(Integer.toString(perceptron.GetMistakes()));
+			_row.add(Double.toString(perceptron.GetAccumulativeAccuracy()));
+			reportTable.AddRow(_row);
+		}
+		
+		reportTable.DisplayTable();
+		
+		System.out.println("----- END: Running Standard Perceptron against project data  -----");
+	}
 	
+	public void Run_MarginPerceptron_Project(){
+
+		System.out.println("----- Running Margin Perceptron against project data  -----");
+		
+		Table reportTable = new Table(4);
+		reportTable.SetHeader(new String[]{"Learning Rate", "Final Weight Vector", "Mistakes", "Accuracy"});
+		
+		ArrayList<Vector> trainingData = LoadDataVector(this.project_final_data);
+		ArrayList<Vector> testData = LoadDataVector(this.project_final_data);
+		
+		int dimension = trainingData.get(0).GetVectorDimension();
+		Vector init_w = MathHelper.RandomizeVector(dimension, this.min_weight, this.max_weight);
+		int epoch = 1;
+		boolean shuffle = false;
+		
+		for(double r : learningRates){
+			MarginPerceptron perceptron = new MarginPerceptron(init_w, r, epoch, shuffle, this.margin);
+
+			perceptron.Train(trainingData);
+
+			perceptron.Predict(testData);
+			
+			ArrayList<String> _row = new ArrayList<String>();
+			_row.add(Double.toString(r));
+			_row.add(perceptron.GetCurrentWeightVector().toStringWithoutLabel());
+			_row.add(Integer.toString(perceptron.GetMistakes()));
+			_row.add(Double.toString(perceptron.GetAccumulativeAccuracy()));
+			reportTable.AddRow(_row);
+		}
+		
+		reportTable.DisplayTable();
+		
+		System.out.println("----- END: Running Margin Perceptron against project data  -----");
+	}
+	
+	public void Run_Winnom_Project(){
+
+		System.out.println("----- Running Winnom against project data  -----");
+		
+		Table reportTable = new Table(3);
+		reportTable.SetHeader(new String[]{"Final Weight Vector", "Mistakes", "Accuracy"});
+		
+		ArrayList<Vector> trainingData = LoadDataVector(this.project_data_subset_nobias);
+		ArrayList<Vector> testData = LoadDataVector(this.project_data_subset_nobias);
+		
+		int dimension = trainingData.get(0).GetVectorDimension();
+		Vector init_w = MathHelper.RandomizeVector(dimension, 1, 1);
+		int epoch = 1;
+		boolean shuffle = true;
+		Winnom winnom = new Winnom(init_w, epoch, shuffle);
+		winnom.Train(trainingData);
+		winnom.Predict(testData);
+		
+		ArrayList<String> _row = new ArrayList<String>();
+		_row.add(winnom.GetCurrentWeightVector().toStringWithoutLabel());
+		_row.add(Integer.toString(winnom.GetMistakes()));
+		_row.add(Double.toString(winnom.GetAccumulativeAccuracy()));
+		reportTable.AddRow(_row);
+		reportTable.DisplayTable();
+		
+	
+		
+		System.out.println("----- END: Running Winnom against project data  -----");
+	}
 	
 	
 	public void Run_Report_Farthest_Point(){

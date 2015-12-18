@@ -40,10 +40,19 @@ public class Vector {
 		for (String s : features) {
 			String trimedStr = "";
 			if(s.startsWith("-")){
-				trimedStr = s.substring(0, 5);
+				//if(s.length()>= 6){
+					//trimedStr = s.substring(0, 5);
+				//}
+				//else
+					trimedStr = s;
 			}
-			else
-				trimedStr = s.substring(0, 4);
+			else{
+				//if(s.length()>=5){
+					//trimedStr = s.substring(0, 4);
+				//}
+				//else
+					trimedStr = s;
+			}
 			result = result + " " + trimedStr;
 		}
 		return "["+result+"]";

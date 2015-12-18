@@ -15,9 +15,11 @@ public class ExperimentWithSummary {
 	String test010 = "data0/test0.10";
 	String table1 = "data0/table1";
 	String table2 = "data0/table2";
-	double min_weight = -1;
-	double max_weight = 1;
-	double[] learningRates = new double[]{0.01, 0.02, 0.03, 0.04, 0.05, 0.08, 0.1, 0.25, 0.5, 0.75, 1};
+	String project_train = "data0/ProjectData.txt";
+	String project_final = "data0/ProjectFinalData.txt";
+	double min_weight = -5;
+	double max_weight = 5;
+	double[] learningRates = new double[]{0.01, 0.02, 0.03, 0.04, 0.05, 0.08, 0.1, 0.25, 0.5, 0.75, 1, 2, 3, 4, 5};
 	double margin = 2;
 	
 
@@ -56,6 +58,73 @@ public class ExperimentWithSummary {
 		System.out.println("----- END: Running Perceptron against table 2 -----");
 	}
 	
+	public void Run_StdPerceptron_Project(){
+		System.out.println("----- Running Standard Perceptron against project data -----");
+		Table reportTable = new Table(4);
+		reportTable.SetHeader(new String[]{"Learning Rate", "Final Weight Vector", "Mistakes", "Accuracy"});
+		
+		ArrayList<Vector> trainingData = LoadDataVector(this.project_final);
+		ArrayList<Vector> testData = LoadDataVector(this.project_final);
+		int dimension = trainingData.get(0).GetVectorDimension();
+		Vector init_w = MathHelper.RandomizeVector(dimension, this.min_weight, this.max_weight);
+		int epoch = 1;
+		boolean shuffle = false;
+		
+		for(double r : learningRates){
+			StdPerceptron perceptron = new StdPerceptron(init_w, r, epoch, shuffle);
+
+			perceptron.Train(trainingData);
+
+			perceptron.Predict(testData);
+			
+			ArrayList<String> _row = new ArrayList<String>();
+			_row.add(Double.toString(r));
+			_row.add(perceptron.GetCurrentWeightVector().toStringWithoutLabel());
+			_row.add(Integer.toString(perceptron.GetMistakes()));
+			_row.add(Double.toString(perceptron.GetAccumulativeAccuracy()));
+			reportTable.AddRow(_row);
+		}
+		
+		reportTable.DisplayTable();
+		
+		System.out.println("----- END: Running Standard Perceptron against project data  -----");
+	}
+	
+	
+	public void Run_MarginPerceptron_Project(){
+
+		System.out.println("----- Running Margin Perceptron against project data  -----");
+		
+		Table reportTable = new Table(4);
+		reportTable.SetHeader(new String[]{"Learning Rate", "Final Weight Vector", "Mistakes", "Accuracy"});
+		
+		ArrayList<Vector> trainingData = LoadDataVector(this.project_final);
+		ArrayList<Vector> testData = LoadDataVector(this.project_final);
+		
+		int dimension = trainingData.get(0).GetVectorDimension();
+		Vector init_w = MathHelper.RandomizeVector(dimension, this.min_weight, this.max_weight);
+		int epoch = 1;
+		boolean shuffle = false;
+		
+		for(double r : learningRates){
+			MarginPerceptron perceptron = new MarginPerceptron(init_w, r, epoch, shuffle, this.margin);
+
+			perceptron.Train(trainingData);
+
+			perceptron.Predict(testData);
+			
+			ArrayList<String> _row = new ArrayList<String>();
+			_row.add(Double.toString(r));
+			_row.add(perceptron.GetCurrentWeightVector().toStringWithoutLabel());
+			_row.add(Integer.toString(perceptron.GetMistakes()));
+			_row.add(Double.toString(perceptron.GetAccumulativeAccuracy()));
+			reportTable.AddRow(_row);
+		}
+		
+		reportTable.DisplayTable();
+		
+		System.out.println("----- END: Running Margin Perceptron against project data  -----");
+	}
 	
 	
 	public void Run_StdPerceptron_Data010_trainData_as_testData(){

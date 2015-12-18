@@ -4,7 +4,14 @@ public class Run {
 		
 		
 		ExperimentWithSummary test = new ExperimentWithSummary();
-		test.Run_Report_Farthest_Point();
+		
+		test.Run_StdPerceptron_Project();
+		System.out.println("********************************");
+		System.out.println("********************************");
+		//test.Run_MarginPerceptron_Project();
+		test.Run_Winnom_Project();
+		
+		//test.Run_Report_Farthest_Point();
 		//test.Run_BestPara_astro_original_tranformed();
 		//test.Run_SVM_Batch();
 		//test.Run_astro_scaled_transformed();
