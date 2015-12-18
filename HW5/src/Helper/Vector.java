@@ -38,26 +38,24 @@ public class Vector {
 	public String toStringWithoutLabel(){
 		String result = "";
 		for (String s : features) {
-			String trimedStr = "";
-			if(s.startsWith("-")){
-				//if(s.length()>= 6){
-					//trimedStr = s.substring(0, 5);
-				//}
-				//else
-					trimedStr = s;
-			}
-			else{
-				//if(s.length()>=5){
-					//trimedStr = s.substring(0, 4);
-				//}
-				//else
-					trimedStr = s;
-			}
+			String trimedStr = String.format("%.2f", Double.parseDouble(s));
 			result = result + " " + trimedStr;
 		}
 		return "["+result+"]";
 	}
 	
+	public String toStringWithoutLabel(boolean integerOnly){
+		String result = "";
+		for (String s : features) {
+			String trimedStr = "";
+			if(integerOnly)
+				trimedStr = Integer.toString((int)Double.parseDouble(s));
+			else
+				trimedStr = String.format("%.2f", Double.parseDouble(s));
+			result = result + " " + trimedStr;
+		}
+		return "["+result+"]";
+	}
 	
 	
 	public Vector Clone()

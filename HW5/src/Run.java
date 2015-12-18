@@ -5,22 +5,30 @@ public class Run {
 		
 		ExperimentWithSummary test = new ExperimentWithSummary();
 		
-		test.Run_StdPerceptron_Project();
+//		test.Run_StdPerceptron_Project(false, true);
+//		System.out.println("********************************");
+//		System.out.println("********************************");
+//
+//		
+//		test.Run_StdPerceptron_Project(true, true);
+//		System.out.println("********************************");
+//		System.out.println("********************************");
+//
+		test.Run_MarginPerceptron_Project(false, true);
 		System.out.println("********************************");
 		System.out.println("********************************");
-		//test.Run_MarginPerceptron_Project();
-		test.Run_Winnom_Project();
 		
-		//test.Run_Report_Farthest_Point();
-		//test.Run_BestPara_astro_original_tranformed();
-		//test.Run_SVM_Batch();
-		//test.Run_astro_scaled_transformed();
-		
-		
+		test.Run_MarginPerceptron_Project(true, true);
 		System.out.println("********************************");
 		System.out.println("********************************");
-		
-		
+//		
+//		test.Run_Winnom(false, true);
+//		System.out.println("********************************");
+//		System.out.println("********************************");
+//		
+//		test.Run_Winnom(true, true);
+//		System.out.println("********************************");
+//		System.out.println("********************************");
 	}
 	
 	static void addMoreSpace(){

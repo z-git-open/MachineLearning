@@ -115,8 +115,20 @@ public class StdPerceptron {
 		return this.init_w;
 	}
 	
-	public int GetMistakes(){
+	public int GetTrainingMistakes(){
 		return this.w_updates;
+	}
+	
+	public int GetTotalTrainings(){
+		return this.total_trainings;
+	}
+	
+	public int GetPredictErrors(){
+		return unmatchedPredicts;
+	}
+	
+	public int GetTestExamplesCount(){
+		return unmatchedPredicts + matchedPredicts;
 	}
 	
 	public String Predict(Vector example) {
@@ -124,8 +136,8 @@ public class StdPerceptron {
 			throw new IllegalArgumentException("StdPerceptron:Predict() - example is null.");
 		}
 		double result = MathHelper.VectorDotProduct(this.weight, example);
-		boolean predictLabel = Double.compare(result, 0) >= 0;
-		boolean realLabel = Double.compare(Double.parseDouble(example.Label), 0) >= 0;
+		boolean predictLabel = MathHelper.IsEqualOrGreater(result, 0);  //Double.compare(result, 0) >= 0;
+		boolean realLabel = MathHelper.IsEqualOrGreater(Double.parseDouble(example.Label), 0); //Double.compare(Double.parseDouble(example.Label), 0) >= 0;
 		if (predictLabel == realLabel) {
 			matchedPredicts++;
 			return "+1";
